@@ -1,10 +1,10 @@
 #!/bin/bash
-cd /tmp/rom
-rm -rf .repo &
+
 
 cd /tmp/rom
 
-source build/envsetup.sh
+
+. build/envsetup.sh
 
 
 lunch aosp_r5x-userdebug
@@ -14,7 +14,7 @@ export SKIP_ABI_CHECKS=true
 export CCACHE_DIR=/tmp/ccache
 export CCACHE_EXEC=$(which ccache)
 export USE_CCACHE=1
-ccache -M 30G
+ccache -M 20G
 ccache -o compression=true
 ccache -z
 ccache -c
@@ -34,9 +34,10 @@ up(){
 }
 
 make_metalava(){
-	mka api-stubs-docs -j16
-	mka system-api-stubs-docs -j16
-	mka test-api-stubs-docs -j16
+	mka api-stubs-docs
+	mka system-api-stubs-docs 
+	mka hiddenapi-lists-docs
+	mka test-api-stubs-docs
 }
 
 make_rom(){
@@ -55,7 +56,8 @@ make_rom(){
 
 make_metalava
 make_rom
-up
-tg_post_msg &
+up &
+sleep 85m
+kill %1
+ccache -s
 
-sleep 4500 && kill "$!"
