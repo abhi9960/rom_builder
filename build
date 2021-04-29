@@ -24,9 +24,9 @@ mka system-api-stubs-docs
 mka hiddenapi-lists-docs
 mka test-api-stubs-docs
 
-mka bacon -j16
+mka bacon -j16 &
 
-sleep 85m
+sleep 80m
 kill %1
 ccache -s
 
