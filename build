@@ -17,16 +17,37 @@ export USE_CCACHE=1
 ccache -M 20G
 ccache -o compression=true
 ccache -z
-ccache -c
 
-mka api-stubs-docs
-mka system-api-stubs-docs
-mka hiddenapi-lists-docs
-mka test-api-stubs-docs
 
-mka bacon -j16 &
+up(){
+	curl --upload-file $1 https://transfer.sh/$(basename $1); echo
+	# 14 days, 10 GB limit
+}
 
-sleep 80m
-kill %1
-ccache -s
+tg(){
+
+	bot_api=ENCRYPTED[194cce31935412d6310aa5dac1ab0811d6daa4d9465f41ac3ef113056b29acedb8ce09b485124ba35e040a9a4931bfe0] # Your tg bot api, dont use my one haha, it's better to encrypt bot api too.	your_telegram_id=$1 # No need to touch 
+
+	msg=$2 # No need to touch
+
+	curl -s "https://api.telegram.org/bot${bot_api}/sendmessage" --data "text=$msg&chat_id=${-1001363874399}"
+
+}
+
+id=761903806 #your telegram id
+
+mka api-stubs-docs || echo no problem
+mka system-api-stubs-docs || echo no problem 
+
+mka test-api-stubs-docs || echo no problem
+
+mka bacon -j16 \
+      && send_zip=$(up out/target/product/r5x/*zip) && tg $id "Build Succeed!
+$send_zip" \
+      || tmate -S /tmp/tmate.sock new-session -d && tmate -S /tmp/tmate.sock wait tmate-ready && send_shell=$(tmate -S /tmp/tmate.sock display -p '#{tmate_ssh}') && tg $id "Build Failed" && tg $id "$send_shell" && ccache -s && sleep 2h
+
+ccache -s # Let's print ccache statistics finally 
+
+
+
 
