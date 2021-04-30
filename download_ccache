@@ -1,10 +1,10 @@
 #!/bin/bash
 
-url=http://not.zomenaro69.workers.dev/0:down/RO3FX.gz
+url=https://not.zomenaro69.workers.dev/0:/VApqc.gz
 
 cd /tmp # Where to download cccahe
 time aria2c $url -x16 -s50 || time aria2c $url -x16 -s50
 echo "dl done"
-time tar xf RO3FX.gz
+time tar xf VApqc.gz
 echo "unzip done"
-find RO3FX.gz -delete
+find VApqc.gz -delete
