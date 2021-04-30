@@ -18,8 +18,8 @@ task:
       - bash sync
     build_script:
       - bash build 
-    uploadccache_script:
-      - bash upload_ccache
+
+  
 
 #start buildbotting
 
